@@ -1,0 +1,80 @@
+@import "./config.scss";
+@import "./normalize.scss";
+
+@import "./elementui.scss";
+
+
+.pull-left{
+    float: left;
+}
+.pull-right{
+    float: right;
+}
+// body{
+//     background-color: $color;
+// }
+
+.black-space-30 { height: 30px; }
+
+.menu {
+    padding-top: 30px;
+    h1 {
+      display: inline-block;
+      width: 85px;
+      font-size: 20px;
+      font-weight: bold;
+      border-bottom: 5px solid #0bb9f8;
+    }
+    .box {
+      width: 94%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      margin: 15px auto;
+      .card {
+        margin-top: 30px;
+        margin-left: 20px;
+        cursor: pointer;
+        width: 30%;
+        background-color: #fff;
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16),
+          0 2px 10px 0 rgba(0, 0, 0, 0.12);
+        img {
+          width: 100%;
+        }
+        .price {
+          display: inline-block;
+          color: #ef5350;
+          font-weight: 600;
+          font-size: 20px;
+          margin: 15px 0px 15px 15px;
+        }
+        p {
+          height: 20px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          font-size: 18px;
+          line-height: 20px;
+          margin: 0px 0px 15px 15px;
+        }
+        .date {
+          height: 20px;
+          color: #999;
+          font-size: 14px;
+          margin-left: 15px;
+          margin-bottom: 20px;
+          display: inline-block;
+        }
+        .mark {
+          color: #42a5f5;
+          padding: 5px 10px;
+          line-height: 10px;
+          border-radius: 10px;
+          border: 1px solid;
+          text-align: center;
+          margin-left: 95px;
+        }
+      }
+    }
+  }
