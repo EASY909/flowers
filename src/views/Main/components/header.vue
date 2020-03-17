@@ -9,8 +9,8 @@
         <img src="../../../assets/images/face.jpg" alt />
         {{username}}
       </div>
-      <div class="header-icon pull-left">
-        <svg-icon iconClass="exit" class="exit"></svg-icon>
+      <div @click="out" class="header-icon pull-left">
+        <svg-icon  iconClass="exit" class="exit" ></svg-icon>
       </div>
     </div>
   </div>
@@ -25,13 +25,11 @@ export default {
   components: {},
   data() {
     //这里存放数据
-    return {
-     
-    };
+    return {};
   },
   //监听属性 类似于data概念
   computed: {
-    username(){
+    username() {
       return this.$store.state.login.username;
     }
   },
@@ -39,8 +37,15 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    navCollapse(){
+    navCollapse() {
+      console.log(222)
       this.$store.commit("login/setCollapse");
+    },
+    out() {
+      console.log(1111)
+      this.$store.dispatch("login/out").then(() => {
+        this.$router.push("/login");
+      });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -95,7 +100,7 @@ export default {
   + .header-icon {
     padding: 0 32px;
   }
-    img {
+  img {
     width: 36px;
     height: 36px;
     border-radius: 18px;

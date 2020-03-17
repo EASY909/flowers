@@ -1,46 +1,42 @@
 <!--  -->
 <template>
   <div id="nav">
-      
-        <el-menu
-          default-active="2"
-          class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
-          background-color="transparent"
-          text-color="#fff"
-          active-text-color="#fff"
-          router
-          :collapse="isCollapse"
-        >
-        <template v-for="(item,index) in routers" v-if="item.child">
-           <el-submenu v-if="!item.hidden" :key="index" :index="index+''">
-            <template slot="title">
-              <i class="el-icon-location" ></i>
-              <span>{{item.meta.name}}</span>
-            </template>
-              <el-menu-item
+    <div class="log">
+      <img src="../../../assets/flowers.png" />
+    </div>
+
+    <el-menu
+      default-active="2"
+      class="el-menu-vertical-demo"
+      @open="handleOpen"
+      @close="handleClose"
+      background-color="transparent"
+      text-color="#fff"
+      active-text-color="#fff"
+      router
+      :collapse="isCollapse"
+    >
+      <template v-for="(item,index) in routers" v-if="item.child">
+        <el-submenu v-if="!item.hidden" :key="index" :index="index+''">
+          <template slot="title">
+             <svg-icon :iconClass="item.meta.icon" :className="item.meta.icon" />
+            <span>{{item.meta.name}}</span>
+          </template>
+          <el-menu-item
             v-for="(subItem,id) in item.children"
             :key="id"
             :index="subItem.path"
           >{{subItem.meta.name}}</el-menu-item>
-          </el-submenu>
-        </template>
+        </el-submenu>
+      </template>
 
-        <template  v-else>
-
-            <el-menu-item  v-if="!item.hidden" :index="item.path">
-              <i class="el-icon-menu"></i>
-             <span slot="title">{{item.meta.name}}</span>
-             </el-menu-item>
-        </template>
-     
-
-
-
-        </el-menu>
-
-   
+      <template v-else>
+        <el-menu-item v-if="!item.hidden" :index="item.path">
+          <svg-icon :iconClass="item.meta.icon" :className="item.meta.icon" />
+          <span slot="title">{{item.meta.name}}</span>
+        </el-menu-item>
+      </template>
+    </el-menu>
   </div>
 </template>
 
@@ -54,13 +50,13 @@ export default {
   data() {
     //这里存放数据
     return {
-      routers:this.$router.options.routes
+      routers: this.$router.options.routes
     };
   },
   //监听属性 类似于data概念
   computed: {
-    isCollapse(){
-      return this.$store.state.login.isCollapse; 
+    isCollapse() {
+      return this.$store.state.login.isCollapse;
     }
   },
   //监控data中的数据变化
@@ -78,8 +74,7 @@ export default {
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    
-   console.log(this.$router.options.routes)
+    //  console.log(this.$router.options.routes)
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -105,28 +100,36 @@ export default {
   svg {
     font-size: 20px;
     margin-right: 10px;
+    
   }
-  .logo {
-    text-align: center;
-    img {
-      margin: 28px auto 25px;
-      width: 92px;
-      @include webkit(transition, all 0.3s ease 0s);
-    }
+   .el-menu .el-menu--inline .el-menu-item{
+    padding-left: 60px !important;
+   }
+     .el-menu-item.is-active{
+    background-color: #009688 !important;
   }
 }
 .open {
   #nav {
     width: $navMenu;
+    img {
+      margin: 30px 30px;
+      width: 120px;
+      @include webkit(transition, all 0.3s ease 0s);
+    }
   }
 }
 .close {
   #nav {
     width: $navMenuMin;
-    .logo img {
-      width: 60%;
+    img {
+      margin: 30px auto;
+      width: 60px;
+      @include webkit(transition, all 0.3s ease 0s);
     }
   }
+
+
 }
 // .close {
 //   #nav-wrap { width: $navMenuMin; }

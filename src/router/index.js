@@ -18,6 +18,7 @@ export default new Router({
         {
             path: "/index",
             name: "index",
+            redirect:"goods",
             hidden:true,
             component: () => import("@/views/Main/index.vue")
         },
@@ -26,8 +27,10 @@ export default new Router({
             name: "goods",
             child:true,
             hidden:false,
+            redirect:"goodsItems",
             meta: {
-                name: '产品管理'
+                name: '产品管理',
+                icon:'international'
             },
             component: () => import("@/views/Main/index.vue"),
             children: [
@@ -53,7 +56,8 @@ export default new Router({
             name: "news",
             child:true,
             meta: {
-                name: '新闻管理'
+                name: '新闻管理',
+                icon:'calculator'
             },
             component: () => import("@/views/Main/index.vue"),
             children: [
@@ -78,7 +82,8 @@ export default new Router({
             name: "casetype",
             child:true,
             meta: {
-                name: '案例管理'
+                name: '案例管理',
+                icon:'filter'
             },
             component: () => import("@/views/Main/index.vue"),
             children: [
@@ -104,7 +109,8 @@ export default new Router({
             child:false,
             redirect: "contactindex",
             meta: {
-                name: '联系方式管理'
+                name: '联系方式管理',
+                icon:'discount'
             },
             component: () => import("@/views/Main/index.vue"),
             children: [
@@ -125,7 +131,8 @@ export default new Router({
             child:false,
             redirect: "aboutindex",
             meta: {
-                name: '关于我们管理'
+                name: '关于我们管理',
+                icon:'edit'
             },
             component: () => import("@/views/Main/index.vue"),
             children: [
@@ -144,7 +151,8 @@ export default new Router({
             child:false,
             redirect: "adminindex",
             meta: {
-                name: '管理员管理'
+                name: '管理员管理',
+                icon:'order'
             },
             component: () => import("@/views/Main/index.vue"),
             children: [

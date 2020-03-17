@@ -1,5 +1,5 @@
 import { login } from "@/api/login.js";
-import {getUserName,setUserName} from "@/utils/login"
+import {getUserName,setUserName,removeUserName} from "@/utils/login"
 const state = {
     username:getUserName() || "",
     isCollapse: JSON.parse(sessionStorage.getItem("isCollapse")) || false,
@@ -33,7 +33,16 @@ const actions = {
                 reject(error)
             })
         })
-    } 
+    },
+    out({commit}){
+        return new Promise((resolve,reject)=>{
+            
+            removeUserName();
+           
+            commit('remove_username');
+            resolve();
+        })
+    }
 
 }
 export default {
