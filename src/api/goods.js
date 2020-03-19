@@ -38,3 +38,19 @@ export function deleteGoodsItems(data){
         data
     })
 }
+
+export function getGoods(data){
+    return service.request({
+        method: 'post',
+        url: 'WebMainServlet',
+        data
+    })
+}
+
+export function deleteGoods(data){
+    return service.request({
+        method: 'post',
+        url: 'WebMainServlet',
+        data
+    })
+}

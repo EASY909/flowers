@@ -4,7 +4,7 @@
     <el-button
       type="danger"
       @click="easyDialog=true"
-      class="addGoodsItems"
+      class="marbom30"
       icon="el-icon-circle-plus-outline"
     >添加</el-button>
     <el-table size="mini" :data="tableData" border style="width: 100%">
@@ -31,7 +31,7 @@
       </el-table-column>
     </el-table>
     <el-pagination
-      style="margin-top:30px"
+     class="martop30"
       :page-size="pageSize"
       background
       layout="prev, pager, next"
@@ -58,6 +58,7 @@ import { getGoodsItems, deleteGoodsItems } from "@/api/goods";
 import easyDialog from "@c/easyDialog/easyDialog";
 import easyDialogEdit from "@c/easyDialog/easyDialogEdit";
 export default {
+  name:"goodsItems",
   //import引入的组件需要注入到对象中才能使用
   components: { easyDialog, easyDialogEdit },
   data() {
@@ -145,7 +146,5 @@ export default {
 </script>
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
-.addGoodsItems {
-  margin-bottom: 30px;
-}
+
 </style>

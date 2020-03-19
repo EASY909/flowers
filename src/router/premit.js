@@ -20,10 +20,10 @@ router.beforeEach((to, from, next) => {
     } else {
         // next("/login")
         if (white.indexOf(to.path) !== -1) {
-            console.log(1)
+            // console.log(1)
             next();
         } else {
-            console.log(2)
+            // console.log(2)
             next("/login");
         }
     }
