@@ -1,4 +1,4 @@
-
+import service from "@/utils/request";
 export default {
     install(Vue, options) {
         Vue.prototype.alertInfos = function (params) {
@@ -38,12 +38,16 @@ export default {
                     message: '已取消删除'
                 });
             });
-
-
-
-
-
         }
+        Vue.prototype.loadTable=function(params){
+            
+            return service.request({
+                method: params.method || "post",
+                url:params.url,
+                data:params.data 
+            })
+        }
+     
 
     }
 }
