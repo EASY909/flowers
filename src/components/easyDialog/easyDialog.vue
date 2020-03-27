@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div id="easyDialog">
+  <div class="easyDialog">
     <el-dialog :title="dialogData.title" :visible.sync="dialogFormVisible" @close="close">
       <el-form :model="form">
         <el-form-item :label="dialogData.label" :label-width="formLabelWidth">

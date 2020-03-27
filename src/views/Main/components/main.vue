@@ -43,7 +43,7 @@ export default {
 //@import url(); 引入公共css类
 @import "../../../styles/config.scss";
 #main {
-  height: 100vh;
+  height: auto;
   background-color: #f5f5f5;
 
 }
@@ -51,7 +51,7 @@ export default {
   width: 100%;
   height: 100%;
   padding-top: $layoutHeader + 30;
-
+  padding-bottom: 30px;
   padding-right: 30px;
 
   @include webkit(box-sizing, border-box);
@@ -71,7 +71,7 @@ export default {
 .content {
   width: 100%;
   height: 100%;
-  padding: 30px 30px 0px;
+  padding: 30px 30px ;
   @include webkit(box-sizing, border-box);
   background-color: #fff;
 }
