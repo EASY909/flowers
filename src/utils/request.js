@@ -19,9 +19,11 @@ service.interceptors.request.use(function (config) {
    
     // 在发送请求之前做些什么
     if (config.method === "post") {
+
         config.data = Qs.stringify(config.data);
+        // console.log( config.data)
       }
-      return config;
+  
 
     return config;
 }, function (error) {

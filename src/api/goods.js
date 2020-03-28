@@ -54,3 +54,10 @@ export function deleteGoods(data){
         data
     })
 }
+export function addGoods(data){
+    return service.request({
+        method: 'post',
+        url: 'WebUploadServlet',
+        data
+    })
+}
