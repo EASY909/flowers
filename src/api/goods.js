@@ -61,3 +61,10 @@ export function addGoods(data){
         data
     })
 }
+export function getGoodsById(data){
+    return service.request({
+        method: 'post',
+        url: 'WebMainServlet',
+        data
+    })
+}

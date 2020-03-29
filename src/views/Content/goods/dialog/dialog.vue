@@ -16,8 +16,12 @@
 
         <el-form-item label="类别" prop="items_id" required>
           <el-select v-model="form.items_id" placeholder="请选择产品类别">
-            <el-option label="区域一" value="10"></el-option>
-            <el-option label="区域二" value="11"></el-option>
+            <el-option
+              :label="items.items_name"
+              :key="items.items_id"
+              v-for="items in goodsItems"
+              :value="items.items_id"
+            ></el-option>
           </el-select>
         </el-form-item>
 
@@ -31,7 +35,7 @@
 
         <el-form-item label="图片" prop="goods_img" class="imgfile">
           <input type="file" @change="getImgfile" id="imgfile" />
-          <img id="Uimg" style="width: 100px;height: 100px;" />
+          <img id="Uimg" :src="form.goods_url" style="width: 100px;height: 100px;" />
         </el-form-item>
 
         <el-form-item>
@@ -46,7 +50,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-// import { addGoods } from "@/api/goods.js";
+import { getGoodsItems, getGoodsById } from "@/api/goods.js";
 import axios from "axios";
 export default {
   name: "compDialog",
@@ -55,6 +59,10 @@ export default {
     flag: {
       type: Boolean,
       default: false
+    },
+    editGoods_id: {
+      type: String,
+      default: ""
     }
   },
   data() {
@@ -66,9 +74,10 @@ export default {
         goods_name: "",
         items_id: "",
         price: "",
-        num: ""
+        num: "",
+        goods_url: ""
       },
-      data: {},
+      goodsItems: [],
       rules: {
         goods_name: [
           { required: true, message: "请输入产品名称", trigger: "blur" }
@@ -82,21 +91,33 @@ export default {
     };
   },
   //监听属性 类似于data概念
-  computed: {},
+  computed: {
+    goods_id() {
+      return this.$store.state.goods.editGoods_id;
+    }
+  },
   //监控data中的数据变化
   watch: {
     flag(nv, ov) {
       this.dialogFormVisible = nv;
     }
+
     // dialogConfig
   },
   //方法集合
   methods: {
+    GetGoodsById(value) {
+      let resData = {
+        method: "getGoodsById",
+        goods_id: value
+      };
+      getGoodsById(resData).then(res => {
+        this.form = res.data;
+      });
+    },
     close() {
       this.$emit("update:flag", false);
       this.resetForm();
-      document.getElementById("Uimg").removeAttribute("src");
-      document.getElementById("imgfile").value = "";
     },
     AddGoods(formName) {
       this.$refs[formName].validate(valid => {
@@ -109,12 +130,19 @@ export default {
       });
     },
     resetForm() {
+      // this.goods_id = "";
+      this.$store.commit("goods/SETEditGoodsId", "");
+      // document.getElementById("Uimg").setAttribute("src", "");
+      document.getElementById("imgfile").value = "";
       this.$refs["form"].resetFields();
     },
     addGoods() {
+      let method = this.goods_id ? "modifyGoods" : "addGoods";
+
       let goods_img = document.getElementById("imgfile").files[0];
 
-      if (!goods_img) {
+
+      if (!goods_img && !this.goods_id) {
         this.$message({
           showClose: true,
           message: "请选择文件！",
@@ -122,14 +150,21 @@ export default {
         });
         return;
       }
+
       let formData = new FormData();
-      formData.append("method", "addGoods");
+      formData.append("method", method);
       formData.append("goods_name", this.form.goods_name);
       formData.append("items_id", this.form.items_id);
       formData.append("price", this.form.price);
       formData.append("num", this.form.num);
 
-      formData.append("goods_img", goods_img);
+      if (this.goods_id) {
+        let newgoods_img = goods_img ? goods_img : this.form.goods_url;
+        formData.append("goods_id", this.goods_id);
+        formData.append("goods_img", newgoods_img);
+      } else {
+        formData.append("goods_img", goods_img);
+      }
       axios({
         url: "http://localhost:8888/flowers/WebUploadServlet",
         method: "post",
@@ -161,10 +196,22 @@ export default {
         //的base64编码格式的地址
         document.getElementById("Uimg").setAttribute("src", e.target.result);
       };
+    },
+    GetGoodsItems() {
+      let requestData = {
+        method: "getGoodsItems",
+        page: 0,
+        limit: 0
+      };
+      getGoodsItems(requestData).then(res => {
+        this.goodsItems = res.data;
+      });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
-  created() {},
+  created() {
+    this.GetGoodsItems();
+  },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {},
   beforeCreate() {}, //生命周期 - 创建之前
