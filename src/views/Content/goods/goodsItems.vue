@@ -7,46 +7,30 @@
       class="marbom30"
       icon="el-icon-circle-plus-outline"
     >添加</el-button>
-    <el-table size="mini" :data="tableData" border style="width: 100%">
-      <el-table-column align="center" prop="items_id" label="产品类别号"></el-table-column>
-      <el-table-column align="center" prop="items_name" label="产品类别名"></el-table-column>
 
-      <el-table-column align="center" label="操作">
-        <template slot-scope="scope">
-          <el-button
-            @click="handleEdit(scope.row.items_id)"
-            type="success"
-            size="mini"
-            icon="el-icon-edit"
-          ></el-button>
-          <el-button
-            @click="DeleteGoodsItems(scope.row.items_id)"
-            type="danger"
-            size="mini"
-            icon="el-icon-delete"
-          ></el-button>
-        </template>
-        <!-- <el-button @click="easyDialogEdit=true" type="success" size="mini" icon="el-icon-edit"></el-button>
-        <el-button @click="DeleteGoodsItems" type="danger" size="mini" icon="el-icon-delete"></el-button>-->
-      </el-table-column>
-    </el-table>
-    <el-pagination
-     class="martop30"
-      :page-size="pageSize"
-      background
-      layout="prev, pager, next"
-      :total="total"
-      @current-change="handleCurrentChange"
-      :current-page="current_page"
-    ></el-pagination>
-    <easyDialog @loadTable="loadGetGoodsItems" :flag.sync="easyDialog" :data="dialogInfo" />
     <!-- <easyDialog :flag="easyDialog" @close="close" /> -->
-
+    <easyDialog @refreshTable="refreshTable" :flag.sync="easyDialog" :dialogInfo="dialogInfo" />
+    <Table ref="table" :tableConfig="tableConfig">
+      <template v-slot:options="rowData">
+        <el-button
+          @click="handleEdit(rowData.rowData.items_id)"
+          type="success"
+          size="mini"
+          icon="el-icon-edit"
+        ></el-button>
+        <el-button
+          @click="DeleteItems(rowData.rowData.items_id)"
+          type="danger"
+          size="mini"
+          icon="el-icon-delete"
+        ></el-button>
+      </template>
+    </Table>
     <easyDialogEdit
-      @loadTable="loadGetGoodsItems"
-      :items_id="items_id"
+      @refreshTable="refreshTable"
+      :id="items_id"
       :flag.sync="easyDialogEdit"
-      :data="dialogInfo"
+      :configdata="EditDialogInfo"
     />
   </div>
 </template>
@@ -54,26 +38,77 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getGoodsItems, deleteGoodsItems } from "@/api/goods";
+import { RequestUrl } from "@/api/requestUrlData.js";
+import Table from "@c/table";
+import { deleteGoodsItems } from "@/api/goods";
 import easyDialog from "@c/easyDialog/easyDialog";
 import easyDialogEdit from "@c/easyDialog/easyDialogEdit";
 export default {
-  name:"goodsItems",
+  name: "goodsItems",
   //import引入的组件需要注入到对象中才能使用
-  components: { easyDialog, easyDialogEdit },
+  components: { easyDialog, easyDialogEdit, Table },
   data() {
     //这里存放数据
     return {
       tableData: [],
       items_id: "",
-      total: 0,
-      pageSize: 5,
-      current_page: 1,
       easyDialog: false,
       easyDialogEdit: false,
+      EditDialogInfo: {
+        title: "添加产品类别",
+        label: "产品类别名",
+        getInfo: "getGoodsItemById",
+        name: "items_name",
+        id: "items_id",
+        requestUrlData: {
+          method: "post",
+          url: "WebMainServlet",
+          data: {
+            method: RequestUrl.modifyGoodsItems,
+            name: "items_name",
+            id: "items_id"
+          }
+        }
+      },
+      tableConfig: {
+        tHead: [
+          {
+            label: "产品类别号",
+            prop: "items_id"
+          },
+          {
+            label: "产品类别名",
+            prop: "items_name"
+          },
+          {
+            label: "操作",
+            columnType: "slot",
+            prop: "options",
+            slotName: "options"
+          }
+        ],
+        requestUrlData: {
+          method: "post",
+          url: "WebMainServlet",
+          data: {
+            method: RequestUrl.getGoodsItems,
+            page: 1,
+            limit: 5
+          }
+        },
+        pagination: true
+      },
       dialogInfo: {
         title: "添加产品类别",
-        label: "产品类别名"
+        label: "产品类别名",
+        requestUrlData: {
+          method: "post",
+          url: "WebMainServlet",
+          data: {
+            method: RequestUrl.addGoodsItems,
+            name: "items_name"
+          }
+        }
       }
     };
   },
@@ -83,37 +118,16 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    handleCurrentChange(val) {
-      this.loadGetGoodsItems(val, 5);
-    },
-    loadGetGoodsItems(page, limit) {
-      let requestData = {
-        method: "getGoodsItems",
-        page: page,
-        limit: limit
-      };
-      getGoodsItems(requestData)
-        .then(response => {
-          if (response.code == 0) {
-            this.total = response.count;
-            this.tableData = response.data;
-          }
-        })
-        .catch(error => {});
-    },
     handleEdit(items_id) {
       this.easyDialogEdit = true;
-      // console.log(items_id);
+
       this.items_id = items_id;
     },
-    DeleteGoodsItems(items_id) {
-      this.items_id=items_id;
+    DeleteItems(items_id) {
+      this.items_id = items_id;
       this.confirm({
         fun: this.dodeleteGoodsItems
       });
-      // deleteGoodsItems(requestData).then(res=>{
-
-      // });
     },
     dodeleteGoodsItems() {
       let requestData = {
@@ -122,17 +136,18 @@ export default {
       };
       deleteGoodsItems(requestData).then(res => {
         this.alertInfos(res);
-        this.loadGetGoodsItems(1, 5)
+        this.refreshTable();
       });
+    },
+    refreshTable() {
+      this.$refs.table.loadTableData(1);
     }
     // close(val){
     //     this.easyDialog=val;
     // }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
-  created() {
-    this.loadGetGoodsItems(this.current_page, 5);
-  },
+  created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {},
   beforeCreate() {}, //生命周期 - 创建之前
@@ -146,5 +161,4 @@ export default {
 </script>
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
-
 </style>

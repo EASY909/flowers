@@ -3,7 +3,7 @@
   <div id="easyDialogEdit">
     <el-dialog
       :title="dialogData.title"
-      @opened="GetGoodsItemById"
+      @opened="GetItemById"
       :visible.sync="dialogFormVisible"
       @close="close"
     >
@@ -14,7 +14,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="ModifyGoodsItems">确 定</el-button>
+        <el-button type="primary" @click="ModifyItems">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -23,7 +23,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { modifyGoodsItems, getGoodsItemById } from "@/api/goods";
+
 export default {
   //import引入的组件需要注入到对象中才能使用
   name: "easyDialogEdit",
@@ -32,11 +32,11 @@ export default {
       type: Boolean,
       default: false
     },
-    data: {
+    configdata: {
       type: Object,
       default: {}
     },
-    items_id: {
+    id: {
       type: String,
       default: ""
     }
@@ -65,53 +65,88 @@ export default {
   },
   //方法集合
   methods: {
+    initDialog() {
+      let data = this.$props.configdata;
+      if (data) {
+        for (const key in data) {
+          this.dialogData[key] = data[key];
+        }
+      }
+    },
     close() {
       this.$emit("update:flag", false);
       //   this.$emit("close",false)
       this.dialogFormVisible = false;
     },
-    GetGoodsItemById() {
+    GetItemById() {
+      let keyid = this.configdata.id;
+      let id = this.$props.id;
       let resData = {
-        method: "getGoodsItemById",
-        items_id: this.items_id
+        method: "post",
+        url: "WebMainServlet",
+        data: {
+          method: this.configdata.getInfo
+        }
       };
+      resData.data[keyid] = id;
       //    console.log(resData);
-      getGoodsItemById(resData).then(res => {
+      this.loadData(resData).then(res => {
         //   console.log(res)
-        this.form.name = res.data.items_name;
+        let keyname = this.configdata.name;
+        console.log(keyname)
+        console.log(res.data[keyname])
+        this.form.name = res.data[keyname];
       });
     },
-    ModifyGoodsItems() {
+    ModifyItems() {
+      if (this.form.name.trim() == "") {
+        this.$message({
+          showClose: true,
+          message: "类别名不能为空！",
+          type: "error"
+        });
+        return;
+      }
+      let data = this.configdata.requestUrlData;
+
       let resData = {
-        method: "modifyGoodsItems",
-        items_id: this.items_id,
-        items_name: this.form.name
+        method: data.method,
+        url: data.url,
+        data: data.data
       };
-      modifyGoodsItems(resData).then(res => {
-          this.alertInfos(res).then(resp=>{
-              this.dialogFormVisible = false;
-              this.$emit("loadTable", 1, 5);
-          })
-        // if (res.code != 1) {
-        //   this.$message({
-        //     showClose: true,
-        //     message: res.msg,
-        //     type: "success"
-        //   });
-        // } else {
-        //   this.$message({
-        //     showClose: true,
-        //     message: res.msg,
-        //     type: "error"
-        //   });
-        // }
-      });
-      console.log(resData);
+      let trueData = data.data;
+
+      resData.data[trueData.name] = this.form.name;
+      resData.data[trueData.id] = this.$props.id;
+      delete trueData.name;
+      delete trueData.id;
+
+      this.loadData(resData)
+        .then(res => {
+          if (res.code != 1) {
+            this.$message({
+              showClose: true,
+              message: res.msg,
+              type: "success"
+            });
+          } else {
+            this.$message({
+              showClose: true,
+              message: res.msg,
+              type: "error"
+            });
+          }
+        })
+        .catch(error => {});
+
+      this.dialogFormVisible = false;
+      this.$emit("refreshTable");
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    this.dialogData = this.data;
+    this.initDialog();
+
     // this.GetGoodsItemById();
   },
   //生命周期 - 挂载完成（可以访问DOM元素）

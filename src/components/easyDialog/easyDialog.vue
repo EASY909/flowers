@@ -9,7 +9,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="AddGoodsItems">确 定</el-button>
+        <el-button type="primary" @click="loadItems">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -27,7 +27,7 @@ export default {
       type: Boolean,
       default: false
     },
-    data: {
+    dialogInfo: {
       type: Object,
       default: {}
     }
@@ -38,7 +38,8 @@ export default {
       dialogFormVisible: false,
       dialogData: {
         title: "",
-        label: ""
+        label: "",
+        requestUrlData: ""
       },
       form: {
         name: ""
@@ -56,26 +57,41 @@ export default {
   },
   //方法集合
   methods: {
+    initDialog() {
+      let data = this.$props.dialogInfo;
+      if (data) {
+        for (const key in data) {
+          this.dialogData[key] = data[key];
+        }
+      }
+    },
     close() {
       this.$emit("update:flag", false);
-      //   this.$emit("close",false)
       this.dialogFormVisible = false;
+      this.form.name = "";
     },
-    AddGoodsItems() {
+    loadItems() {
       if (this.form.name.trim() == "") {
         this.$message({
           showClose: true,
-          message: "产品类别名不能为空！",
+          message: "类别名不能为空！",
           type: "error"
         });
         return;
       }
-      let resData = {
-        method: "addGoodsItems",
-        items_name: this.form.name
-      };
+      let data = this.dialogData.requestUrlData;
 
-      addGoodsItems(resData)
+      let resData = {
+        method: data.method,
+        url: data.url,
+        data: data.data
+      };
+      let trueData = data.data;
+
+      resData.data[trueData.name] = this.form.name;
+      delete trueData.name;
+
+      this.loadData(resData)
         .then(res => {
           if (res.code != 1) {
             this.$message({
@@ -94,13 +110,12 @@ export default {
         .catch(error => {});
 
       this.dialogFormVisible = false;
-      this.$emit("loadTable", 1, 5);
-      this.form.name = "";
+      this.$emit("refreshTable");
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    this.dialogData = this.data;
+    this.initDialog();
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {},

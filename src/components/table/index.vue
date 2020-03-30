@@ -77,6 +77,7 @@ export default {
       }
     },
     loadTableData(val) {
+     
       let data = this.data.tableConfig.requestUrlData;
       let resData = {
         method: data.method,
@@ -85,7 +86,7 @@ export default {
       };
       resData.data.page=val
     
-      this.loadTable(resData).then(res => {
+      this.loadData(resData).then(res => {
         
         this.data.tableData = res.data;
         this.total= res.count;
@@ -101,6 +102,7 @@ export default {
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
+   
     this.initConfig();
     this.loadTableData(1);
   },

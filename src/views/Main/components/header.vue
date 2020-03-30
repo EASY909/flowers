@@ -38,11 +38,11 @@ export default {
   //方法集合
   methods: {
     navCollapse() {
-      console.log(222)
+
       this.$store.commit("login/setCollapse");
     },
     out() {
-      console.log(1111)
+
       this.$store.dispatch("login/out").then(() => {
         this.$router.push("/login");
       });
