@@ -85,7 +85,7 @@ export default {
         pagination: true
       },
       EditDialogInfo: {
-        title: "添加新闻类别",
+        title: "修改新闻类别",
         label: "新闻类别名",
         getInfo: "getNewsTypeById",
         id: "newstype_id",
@@ -107,8 +107,8 @@ export default {
           method: "post",
           url: "WebMainServlet",
           data: {
-            method: RequestUrl.addGoodsItems,
-            name: "items_name"
+            method: RequestUrl.addNewsType,
+            name: "newstype_name"
           }
         }
       }
@@ -121,7 +121,7 @@ export default {
   //方法集合
   methods: {
     refreshTable() {
- 
+      console.log(1111)
       this.$refs.table.loadTableData(1);
     },
     handleEdit(val) {

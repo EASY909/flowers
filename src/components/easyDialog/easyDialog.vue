@@ -90,7 +90,7 @@ export default {
 
       resData.data[trueData.name] = this.form.name;
       delete trueData.name;
-
+      console.log(resData)
       this.loadData(resData)
         .then(res => {
           if (res.code != 1) {

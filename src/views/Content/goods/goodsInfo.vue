@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div id="goodsInfo">
+  <div class="goodsInfo">
     <el-button
       type="danger"
       @click="compDialog=true"

@@ -5,6 +5,7 @@ const RequestUrl={
     getGoodsItems:"getGoodsItems",
     addGoodsItems:"addGoodsItems",
     modifyGoodsItems:"modifyGoodsItems",
-    modifyNewsType:"modifyNewsType"
+    modifyNewsType:"modifyNewsType",
+    getNews:"getNews"
 }
 export {RequestUrl}

@@ -93,8 +93,7 @@ export default {
       this.loadData(resData).then(res => {
         //   console.log(res)
         let keyname = this.configdata.name;
-        console.log(keyname)
-        console.log(res.data[keyname])
+
         this.form.name = res.data[keyname];
       });
     },
