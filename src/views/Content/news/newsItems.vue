@@ -121,7 +121,6 @@ export default {
   //方法集合
   methods: {
     refreshTable() {
-      console.log(1111)
       this.$refs.table.loadTableData(1);
     },
     handleEdit(val) {

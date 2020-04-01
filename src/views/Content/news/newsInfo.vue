@@ -7,22 +7,29 @@
       class="marbom30"
       icon="el-icon-circle-plus-outline"
     >添加</el-button>
-  <Table ref="table" :tableConfig="tableConfig">
-    <template v-slot:options="rowData">
-      <el-button
-        @click="handleEdit(rowData.rowData.goods_id)"
-        type="success"
-        size="mini"
-        icon="el-icon-edit"
-      ></el-button>
-      <el-button
-        @click="DeleteGoods(rowData.rowData.goods_id)"
-        type="danger"
-        size="mini"
-        icon="el-icon-delete"
-      ></el-button>
-    </template>
-  </Table>
+    <Table ref="table" :tableConfig="tableConfig">
+      <template v-slot:options="rowData">
+        <el-button
+          @click="handleEdit(rowData.rowData.news_id)"
+          type="success"
+          size="mini"
+          icon="el-icon-edit"
+        ></el-button>
+        <el-button
+          @click="DeleteNews(rowData.rowData.news_id)"
+          type="danger"
+          size="mini"
+          icon="el-icon-delete"
+        ></el-button>
+      </template>
+    </Table>
+
+    <Dialog
+      @refreshTable="refreshTable"
+      ref="dialog"
+      :flag.sync="compDialog"
+      :news_id.sync="news_id"
+    />
   </div>
 </template>
 
@@ -30,17 +37,19 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import Table from "@c/table";
+import Dialog from "./dialog/dialog";
 import { RequestUrl } from "@/api/requestUrlData.js";
+import {deleteNews} from "@/api/news"
 export default {
   name: "newsInfo",
   //import引入的组件需要注入到对象中才能使用
-  components: { Table },
+  components: { Table, Dialog },
   data() {
     //这里存放数据
     return {
       tableData: [],
       editGoods_id: "",
-      goods_id: "",
+      news_id: "",
       compDialog: false,
       easyDialogEdit: false,
       tableConfig: {
@@ -96,9 +105,23 @@ export default {
   //方法集合
   methods: {
     handleEdit(val) {
-      //  console.log(this.editGoods_id)
+      this.compDialog = true;
+      this.news_id = val;
+      this.$refs.dialog.GetGoodsById(val);
     },
-    DeleteGoods(val) {}
+    DeleteNews(val) {
+      let requestData={
+        method:"deleteNews",
+        news_id:val
+      }
+      deleteNews(requestData).then(res => {
+        this.alertInfos(res);
+        this.refreshTable();
+      });
+    },
+    refreshTable() {
+      this.$refs["table"].loadTableData(1);
+    }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},

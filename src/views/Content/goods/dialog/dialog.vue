@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class="compDialog">
+  <div class="goodsDialog">
     <el-dialog title="添加产品信息" width="40%" :visible.sync="dialogFormVisible" @close="close">
       <el-form
         label-width="100px"
@@ -53,7 +53,7 @@
 import { getGoodsItems, getGoodsById } from "@/api/goods.js";
 import axios from "axios";
 export default {
-  name: "compDialog",
+  name: "goodsDialog",
   //import引入的组件需要注入到对象中才能使用
   props: {
     flag: {

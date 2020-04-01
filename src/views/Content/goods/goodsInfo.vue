@@ -37,7 +37,12 @@
       :flag.sync="easyDialogEdit"
       :data="dialogInfo"
     />-->
-    <CompDialog @refreshTable="refreshTable" :editGoods_id="editGoods_id" ref="CompDialog" :flag.sync="compDialog" />
+    <CompDialog
+      @refreshTable="refreshTable"
+      :editGoods_id="editGoods_id"
+      ref="CompDialog"
+      :flag.sync="compDialog"
+    />
   </div>
 </template>
 
@@ -59,7 +64,7 @@ export default {
     //这里存放数据
     return {
       tableData: [],
-      editGoods_id:"",
+      editGoods_id: "",
       goods_id: "",
       compDialog: false,
       easyDialogEdit: false,
@@ -134,12 +139,11 @@ export default {
       });
     },
     handleEdit(val) {
-      
-      this.compDialog=true;
-      this.editGoods_id=val;
-       this.$refs["CompDialog"].GetGoodsById(val);
-       this.$store.commit("goods/SETEditGoodsId",val)
-  //  console.log(this.editGoods_id)
+      this.compDialog = true;
+      this.editGoods_id = val;
+      this.$refs["CompDialog"].GetGoodsById(val);
+      this.$store.commit("goods/SETEditGoodsId", val);
+      //  console.log(this.editGoods_id)
     },
     // loadGetGoods(page, limit) {
     //   let requestData = {
