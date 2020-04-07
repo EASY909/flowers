@@ -6,6 +6,12 @@ const RequestUrl={
     addGoodsItems:"addGoodsItems",
     modifyGoodsItems:"modifyGoodsItems",
     modifyNewsType:"modifyNewsType",
-    getNews:"getNews"
+    getNews:"getNews",
+    getCaseType:"getCaseType",
+    addCaseType:"addCaseType",
+    getCaseTypeById:"getCaseTypeById",
+    modifyCaseType:"modifyCaseType",
+    getCases:"getCases",
+    deleteCase:"deleteCase"
 }
 export {RequestUrl}

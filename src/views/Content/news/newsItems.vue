@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div id="newsItems">
+  <div class="newsItems">
     <el-button
       type="danger"
       @click="easyDialog=true"
@@ -51,9 +51,6 @@ export default {
     return {
       tableData: [],
       newstype_id: "",
-      total: 0,
-      pageSize: 5,
-      current_page: 1,
       easyDialog: false,
       easyDialogEdit: false,
       tableConfig: {

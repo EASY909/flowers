@@ -56,7 +56,17 @@ export default {
     };
   },
   //监听属性 类似于data概念
-  computed: {},
+  computed: {
+    params() {
+      let data = this.configdata.requestUrlData.data;
+      let trueData = Object.assign({}, data);
+      trueData[data.name] = this.form.name;
+      trueData[data.id] = this.id;
+      delete trueData.name;
+      delete trueData.id;
+      return trueData;
+    }
+  },
   //监控data中的数据变化
   watch: {
     flag(nv, ov) {
@@ -106,19 +116,20 @@ export default {
         });
         return;
       }
-      let data = this.configdata.requestUrlData;
 
-      let resData = {
-        method: data.method,
-        url: data.url,
-        data: data.data
-      };
-      let trueData = data.data;
+      let data = this.configdata.requestUrlData.data;
 
-      resData.data[trueData.name] = this.form.name;
-      resData.data[trueData.id] = this.$props.id;
+      let trueData = Object.assign({}, data);
+      trueData[data.name] = this.form.name;
+      trueData[data.id] = this.id;
       delete trueData.name;
       delete trueData.id;
+
+      let resData = {
+        method: this.configdata.requestUrlData.method,
+        url: this.configdata.requestUrlData.url,
+        data: trueData
+      };
 
       this.loadData(resData)
         .then(res => {

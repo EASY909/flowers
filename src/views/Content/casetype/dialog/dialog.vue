@@ -1,7 +1,7 @@
 <!--  -->
 <template>
-  <div class="goodsDialog">
-    <el-dialog title="添加产品信息" width="40%" :visible.sync="dialogFormVisible" @close="close">
+  <div class="caseDialog">
+    <el-dialog title="产品信息" width="40%" :visible.sync="dialogFormVisible" @close="close">
       <el-form
         label-width="100px"
         :model="form"
@@ -10,37 +10,29 @@
         :rules="rules"
         ref="form"
       >
-        <el-form-item label="产品名" prop="goods_name" required>
-          <el-input v-model="form.goods_name"></el-input>
-        </el-form-item>
-
-        <el-form-item label="类别" prop="items_id" required>
-          <el-select v-model="form.items_id" placeholder="请选择产品类别">
+        <el-form-item label="类别" prop="casetype_id" required>
+          <el-select v-model="form.casetype_id" placeholder="请选择产品类别">
             <el-option
-              :label="items.items_name"
-              :key="items.items_id"
-              v-for="items in goodsItems"
-              :value="items.items_id"
+              :label="items.casetype_name"
+              :key="items.casetype_id"
+              v-for="items in caseItems"
+              :value="items.casetype_id"
             ></el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="价格" prop="price" required>
-          <el-input v-model.number="form.price"></el-input>
+        <el-form-item label="案例简介" prop="case_introduction" required>
+          <el-input v-model.number="form.case_introduction"></el-input>
         </el-form-item>
 
-        <el-form-item label="数量" prop="num" required>
-          <el-input v-model.number="form.num"></el-input>
-        </el-form-item>
-
-        <el-form-item label="图片" prop="goods_img" class="imgfile">
+        <el-form-item label="案例图片" prop="images" class="imgfile">
           <input type="file" @change="getImgfile" id="imgfile" />
-          <img id="Uimg" :src="form.goods_url" style="width: 100px;height: 100px;" />
+          <img id="Uimg" :src="form.case_url" style="width: 100px;height: 100px;" />
         </el-form-item>
 
         <el-form-item>
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="AddGoods('form')">确 定</el-button>
+          <el-button type="primary" @click="AddCase('form')">确 定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -50,17 +42,17 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getGoodsItems, getGoodsById } from "@/api/goods.js";
+import { getCaseType, getCaseById } from "@/api/case.js";
 import axios from "axios";
 export default {
-  name: "goodsDialog",
+  name: "caseDialog",
   //import引入的组件需要注入到对象中才能使用
   props: {
     flag: {
       type: Boolean,
       default: false
     },
-    editGoods_id: {
+    case_id: {
       type: String,
       default: ""
     }
@@ -69,32 +61,27 @@ export default {
     //这里存放数据
     return {
       dialogFormVisible: false,
-      imageUrl: "",
       form: {
-        goods_name: "",
-        items_id: "",
-        price: "",
-        num: "",
-        goods_url: ""
+        casetype_id: "",
+        case_introduction: "",
+        case_url: ""
       },
-      goodsItems: [],
+      caseItems: [],
       rules: {
-        goods_name: [
-          { required: true, message: "请输入产品名称", trigger: "blur" }
+        case_introduction: [
+          { required: true, message: "请输入案例简介", trigger: "blur" }
         ],
-        items_id: [
-          { required: true, message: "请选择产品类别", trigger: "change" }
-        ],
-        price: [{ required: true, message: "请选择价格", trigger: "blur" }],
-        num: [{ required: true, message: "请选择数量", trigger: "blur" }]
+        casetype_id: [
+          { required: true, message: "请选择案例类别", trigger: "change" }
+        ]
       }
     };
   },
   //监听属性 类似于data概念
   computed: {
-    goods_id() {
-      return this.$store.state.goods.editGoods_id;
-    }
+    // goods_id() {
+    //   return this.$store.state.goods.editGoods_id;
+    // }
   },
   //监控data中的数据变化
   watch: {
@@ -106,12 +93,12 @@ export default {
   },
   //方法集合
   methods: {
-    GetGoodsById(value) {
+    GetCaseById(value) {
       let resData = {
-        method: "getGoodsById",
-        goods_id: value
+        method: "getCaseById",
+        case_id: value
       };
-      getGoodsById(resData).then(res => {
+      getCaseById(resData).then(res => {
         this.form = res.data;
       });
     },
@@ -119,31 +106,28 @@ export default {
       this.$emit("update:flag", false);
       this.resetForm();
     },
-    AddGoods(formName) {
+    AddCase(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.addGoods();
-        } else {
-          //   console.log("error submit!!");
-          return;
+          this.addCase();
         }
       });
     },
     resetForm() {
-      // this.goods_id = "";
-      this.$store.commit("goods/SETEditGoodsId", "");
-      this.form.goods_url = "";
-      document.getElementById("Uimg").setAttribute("src", "");
-      // document.getElementById("Uimg").setAttribute("src", "");
       document.getElementById("imgfile").value = "";
+
+      this.form.case_url = "";
+      document.getElementById("Uimg").setAttribute("src","");
+  
+      this.$emit("update:case_id", "");
       this.$refs["form"].resetFields();
     },
-    addGoods() {
-      let method = this.goods_id ? "modifyGoods" : "addGoods";
+    addCase() {
+      let method;
 
-      let goods_img = document.getElementById("imgfile").files[0];
+      let case_img = document.getElementById("imgfile").files[0];
 
-      if (!goods_img && !this.goods_id) {
+      if (!case_img && !this.case_id) {
         this.$message({
           showClose: true,
           message: "请选择文件！",
@@ -153,19 +137,21 @@ export default {
       }
 
       let formData = new FormData();
-      formData.append("method", method);
-      formData.append("goods_name", this.form.goods_name);
-      formData.append("items_id", this.form.items_id);
-      formData.append("price", this.form.price);
-      formData.append("num", this.form.num);
 
-      if (this.goods_id) {
-        let newgoods_img = goods_img ? goods_img : this.form.goods_url;
-        formData.append("goods_id", this.goods_id);
-        formData.append("goods_img", newgoods_img);
+      formData.append("case_introduction", this.form.case_introduction);
+      formData.append("casetype_id", this.form.casetype_id);
+
+      if (this.case_id) {
+        method = "modifyCase";
+        let newgoods_img = case_img ? case_img : this.form.case_url;
+        formData.append("case_id", this.case_id);
+        formData.append("case_img", newgoods_img);
       } else {
-        formData.append("goods_img", goods_img);
+        method = "addCase";
+        formData.append("case_img", case_img);
       }
+      formData.append("method", method);
+
       axios({
         url: "http://localhost:8888/flowers/WebUploadServlet",
         method: "post",
@@ -179,8 +165,9 @@ export default {
             message: res.data.msg,
             type: "success"
           });
-          this.$emit("refreshTable");
+
           this.close();
+          this.$emit("refreshTable");
         }
       });
     },
@@ -198,20 +185,20 @@ export default {
         document.getElementById("Uimg").setAttribute("src", e.target.result);
       };
     },
-    GetGoodsItems() {
+    GetCaseType() {
       let requestData = {
-        method: "getGoodsItems",
+        method: "getCaseType",
         page: 0,
         limit: 0
       };
-      getGoodsItems(requestData).then(res => {
-        this.goodsItems = res.data;
+      getCaseType(requestData).then(res => {
+        this.caseItems = res.data;
       });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    this.GetGoodsItems();
+    this.GetCaseType();
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {},

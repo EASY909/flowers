@@ -63,7 +63,6 @@ export default {
   data() {
     //这里存放数据
     return {
-      tableData: [],
       editGoods_id: "",
       goods_id: "",
       compDialog: false,
@@ -143,26 +142,10 @@ export default {
       this.editGoods_id = val;
       this.$refs["CompDialog"].GetGoodsById(val);
       this.$store.commit("goods/SETEditGoodsId", val);
-      //  console.log(this.editGoods_id)
     },
-    // loadGetGoods(page, limit) {
-    //   let requestData = {
-    //     method: "getGoods",
-    //     page: page,
-    //     limit: limit
-    //   };
-    //   getGoods(requestData)
-    //     .then(response => {
-    //       if (response.code == 0) {
-    //         this.total = response.count;
-    //         this.tableData = response.data;
-    //       }
-    //     })
-    //     .catch(error => {});
-    // },
+
     refreshTable() {
-      // console.log(1111)
-      // this.loadGetGoods(1, 5);
+
       this.$refs["table"].loadTableData(1);
     }
   },
