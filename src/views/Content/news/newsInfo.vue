@@ -51,7 +51,6 @@ export default {
       editGoods_id: "",
       news_id: "",
       compDialog: false,
-      easyDialogEdit: false,
       tableConfig: {
         tHead: [
           {

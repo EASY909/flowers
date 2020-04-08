@@ -10,7 +10,7 @@
       <el-form-item label="公司详情" prop="detail">
         <el-input type="textarea" v-model="form.detail"></el-input>
       </el-form-item>
-        <el-form-item>
+      <el-form-item>
         <el-button class="martop30" type="primary" @click="modifyIntro">修改</el-button>
       </el-form-item>
     </el-form>
@@ -20,7 +20,8 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import { contact } from "@/api/contact";
+import axios from "axios";
 export default {
   name: "about",
   //import引入的组件需要注入到对象中才能使用
@@ -54,12 +55,45 @@ export default {
         document.getElementById("Uimg").setAttribute("src", e.target.result);
       };
     },
-    modifyIntro(){
-        
+    modifyIntro() {
+      let company_img = document.getElementById("imgfile").files[0];
+      //  let new_img = company_img ? company_img : this.form.company_img;
+      let formData = new FormData();
+      formData.append("method", "modifyIntro");
+      formData.append("detail", this.form.detail);
+      formData.append("company_img", company_img || this.form.company_img);
+
+      axios({
+        url: "http://localhost:8888/flowers/WebUploadServlet",
+        method: "post",
+        data: formData,
+        processData: false, // 告诉axios不要去处理发送的数据(重要参数)
+        contentType: false // 告诉axios不要去设置Content-Type请求头
+      }).then(res => {
+        if (res.data.code == 0) {
+          this.$message({
+            showClose: true,
+            message: res.data.msg,
+            type: "success"
+          });
+          // this.$emit("refreshTable");
+          // this.close();
+        }
+      });
+    },
+    getIntroduction() {
+      let reqData = {
+        method: "getIntroduction"
+      };
+      contact(reqData).then(res => {
+        this.form = res.data;
+      });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
-  created() {},
+  created() {
+    this.getIntroduction();
+  },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {},
   beforeCreate() {}, //生命周期 - 创建之前

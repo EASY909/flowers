@@ -12,6 +12,7 @@ const RequestUrl={
     getCaseTypeById:"getCaseTypeById",
     modifyCaseType:"modifyCaseType",
     getCases:"getCases",
-    deleteCase:"deleteCase"
+    deleteCase:"deleteCase",
+    getAdmin:"getAdmin"
 }
 export {RequestUrl}
