@@ -16,7 +16,7 @@
           icon="el-icon-edit"
         ></el-button>
         <el-button
-          @click="DeleteNews(rowData.rowData.admin_id)"
+          @click="Delete(rowData.rowData.admin_id)"
           type="danger"
           size="mini"
           icon="el-icon-delete"
@@ -37,6 +37,7 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import Table from "@c/table";
 import Dialog from "./dialog/dialog";
+import { getAdmin } from "@/api/admin.js";
 import { RequestUrl } from "@/api/requestUrlData.js";
 export default {
   name: "admin",
@@ -97,6 +98,28 @@ export default {
   methods: {
     refreshTable() {
       this.$refs["table"].loadTableData(1);
+    },
+    handleEdit(val) {
+      this.compDialog = true;
+      this.admin_id = val;
+      this.$refs["dialog"].GetAdminById(val);
+    },
+   
+    Delete(val) {
+      this.admin_id = val;
+      this.confirm({
+        fun: this.deleteAdmin
+      });
+    },
+    deleteAdmin() {
+      let requestData = {
+        method: "deleteAdmin",
+        admin_id: this.admin_id
+      };
+      getAdmin(requestData).then(res => {
+        this.alertInfos(res);
+        this.refreshTable();
+      });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）

@@ -10,34 +10,25 @@
         :rules="rules"
         ref="form"
       >
-        <el-form-item label="新闻类别" prop="newstype_id" required>
-          <el-select v-model="form.newstype_id" placeholder="请选择新闻类别">
-            <el-option
-              :label="items.newstype_name"
-              :key="items.newstype_id"
-              v-for="items in newsItems"
-              :value="items.newstype_id"
-            ></el-option>
-          </el-select>
+        <el-form-item label="姓名" prop="name" required>
+          <el-input v-model="form.name"></el-input>
         </el-form-item>
 
-        <el-form-item label="关键词" prop="keyword" required>
-          <el-input v-model="form.keyword"></el-input>
+        <el-form-item label="登录名" prop="user_name" required>
+          <el-input v-model="form.user_name"></el-input>
         </el-form-item>
 
-        <el-form-item label="新闻标题" prop="news_title" required>
-          <el-input v-model="form.news_title"></el-input>
+        <el-form-item label="手机" prop="mobile" required>
+          <el-input v-model="form.mobile"></el-input>
         </el-form-item>
 
-        <el-form-item label="新闻内容" prop="news_content" required>
-          <el-input type="textarea" v-model="form.news_content"></el-input>
+        <el-form-item label="密码" prop="pwd" required>
+          <el-input v-model="form.pwd"></el-input>
         </el-form-item>
-        <el-form-item label="时间" prop="news_time">
-          <el-input v-model="form.news_time" disabled></el-input>
-        </el-form-item>
+
         <el-form-item>
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="AddNews('form')">确 定</el-button>
+          <el-button type="primary" @click="Admin('form')">确 定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -47,7 +38,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getNewsType, addNews, getNewsById } from "@/api/news.js";
+import { getAdmin } from "@/api/admin.js";
 import axios from "axios";
 export default {
   name: "newsDialog",
@@ -57,7 +48,7 @@ export default {
       type: Boolean,
       default: false
     },
-    news_id: {
+    admin_id: {
       type: String,
       default: ""
     }
@@ -68,24 +59,20 @@ export default {
       dialogFormVisible: false,
       form: {
         method: "",
-        newstype_id: "",
-        news_title: "",
-        news_time: new Date().toLocaleDateString(),
-        keyword: "",
-        news_content: ""
+        admin_id:"",
+        user_name: "",
+        name: "",
+        mobile: "",
+        pwd: ""
       },
       newsItems: [],
       rules: {
-        newstype_id: [
-          { required: true, message: "请选择新闻类别", trigger: "change" }
+        user_name: [
+          { required: true, message: "请输入登录名", trigger: "blur" }
         ],
-        news_title: [
-          { required: true, message: "请输入关键词", trigger: "blur" }
-        ],
-        keyword: [{ required: true, message: "请输入标题", trigger: "blur" }],
-        news_content: [
-          { required: true, message: "请输入内容", trigger: "blur" }
-        ]
+        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        mobile: [{ required: true, message: "请输入手机号", trigger: "blur" }],
+        pwd: [{ required: true, message: "请输入密码", trigger: "blur" }]
       }
     };
   },
@@ -101,24 +88,24 @@ export default {
   },
   //方法集合
   methods: {
-    GetGoodsById(value) {
+    GetAdminById(value) {
       let resData = {
-        method: "getNewsById",
-        news_id: value
+        method: "getAdminById",
+        admin_id: value
       };
-      getNewsById(resData).then(res => {
+      getAdmin(resData).then(res => {
         this.form = res.data;
-        this.news_time=this.form.news_time;
+        
       });
     },
     close() {
       this.$emit("update:flag", false);
       this.resetForm();
     },
-    AddNews(formName) {
+    Admin(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.DialogAddNews();
+          this.DialogAdmin();
         }
       });
     },
@@ -126,20 +113,20 @@ export default {
       // this.goods_id = "";
       // this.$store.commit("goods/SETEditGoodsId", "");
       // document.getElementById("Uimg").setAttribute("src", "");
-      this.$emit("update:news_id", "");
+      this.$emit("update:admin_id", "");
       this.$refs["form"].resetFields();
     },
-    DialogAddNews() {
-      if (this.news_id) {
-        this.form.method = "modifyNews";
-        this.form.news_id = this.news_id;
+    DialogAdmin() {
+      if (this.admin_id) {
+        this.form.method = "modifyAdmin";
+        this.form.admin_id = this.admin_id;
       } else {
-        this.form.method = "addNews";
-        delete this.form.news_id;
+        this.form.method = "addAdmin";
+        delete this.form.admin_id;
       }
-
-      addNews(this.form).then(res => {
-        if (res.code == 0) {
+      
+      getAdmin(this.form).then(res => {
+       
           this.$message({
             showClose: true,
             message: res.msg,
@@ -147,24 +134,14 @@ export default {
           });
           this.$emit("refreshTable");
           this.close();
-        }
+        
       });
     },
 
-    GetNewsType() {
-      let requestData = {
-        method: "getNewsType",
-        page: 0,
-        limit: 0
-      };
-      getNewsType(requestData).then(res => {
-        this.newsItems = res.data;
-      });
-    }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    this.GetNewsType();
+    // this.GetNewsType();
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {},
