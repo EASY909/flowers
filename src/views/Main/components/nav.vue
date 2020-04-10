@@ -19,7 +19,7 @@
       <template v-for="(item,index) in routers" v-if="item.child">
         <el-submenu v-if="!item.hidden" :key="index" :index="index+''">
           <template slot="title">
-             <svg-icon :iconClass="item.meta.icon" :className="item.meta.icon" />
+            <svg-icon :iconClass="item.meta.icon" :className="item.meta.icon" />
             <span>{{item.meta.name}}</span>
           </template>
           <el-menu-item
@@ -49,14 +49,23 @@ export default {
   components: {},
   data() {
     //这里存放数据
-    return {
-      routers: this.$router.options.routes
-    };
+    return {};
   },
   //监听属性 类似于data概念
   computed: {
     isCollapse() {
       return this.$store.state.login.isCollapse;
+    },
+    routers() {
+     
+      if (this.$store.state.login.access_level == 0) {
+        
+        this.$router.options.routes[8].hidden = true;
+      }else{
+       this.$router.options.routes[8].hidden = false;
+      }
+
+      return this.$router.options.routes;
     }
   },
   //监控data中的数据变化
@@ -73,9 +82,7 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {
-    //  console.log(this.$router.options.routes)
-  },
+  mounted() {},
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -100,12 +107,11 @@ export default {
   svg {
     font-size: 20px;
     margin-right: 10px;
-    
   }
-   .el-menu .el-menu--inline .el-menu-item{
+  .el-menu .el-menu--inline .el-menu-item {
     padding-left: 60px !important;
-   }
-     .el-menu-item.is-active{
+  }
+  .el-menu-item.is-active {
     background-color: #009688 !important;
   }
 }
@@ -128,8 +134,6 @@ export default {
       @include webkit(transition, all 0.3s ease 0s);
     }
   }
-
-
 }
 // .close {
 //   #nav-wrap { width: $navMenuMin; }
