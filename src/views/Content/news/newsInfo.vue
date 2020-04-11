@@ -39,7 +39,7 @@
 import Table from "@c/table";
 import Dialog from "./dialog/dialog";
 import { RequestUrl } from "@/api/requestUrlData.js";
-import {deleteNews} from "@/api/news"
+import { News } from "@/api/news";
 export default {
   name: "newsInfo",
   //import引入的组件需要注入到对象中才能使用
@@ -48,7 +48,7 @@ export default {
     //这里存放数据
     return {
       tableData: [],
-      editGoods_id: "",
+      del_id:"",
       news_id: "",
       compDialog: false,
       tableConfig: {
@@ -108,12 +108,19 @@ export default {
       this.news_id = val;
       this.$refs.dialog.GetGoodsById(val);
     },
+
     DeleteNews(val) {
-      let requestData={
-        method:"deleteNews",
-        news_id:val
-      }
-      deleteNews(requestData).then(res => {
+      this.del_id = val;
+      this.confirm({
+        fun: this.dodeleteDeleteNews
+      });
+    },
+    dodeleteDeleteNews() {
+      let requestData = {
+        method: "deleteNews",
+        news_id: this.del_id
+      };
+      News(requestData).then(res => {
         this.alertInfos(res);
         this.refreshTable();
       });

@@ -6,7 +6,6 @@
         <input type="file" @change="getImgfile" id="imgfile" />
         <img id="Uimg" :src="form.company_img" style="width: 300px;height:100%" />
       </el-form-item>
-
       <el-form-item label="公司详情" prop="detail">
         <el-input type="textarea" v-model="form.detail"></el-input>
       </el-form-item>

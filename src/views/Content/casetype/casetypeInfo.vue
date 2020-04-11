@@ -40,7 +40,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { deleteCase } from "@/api/case";
+import { Case } from "@/api/case";
 import Table from "@c/table";
 import CompDialog from "./dialog/dialog";
 import { RequestUrl } from "@/api/requestUrlData.js";
@@ -55,6 +55,7 @@ export default {
     //这里存放数据
     return {
       case_id: "",
+      del_id:"",
       compDialog: false,
       easyDialogEdit: false,
       tableConfig: {
@@ -104,7 +105,7 @@ export default {
   //方法集合
   methods: {
     DeleteCase(val) {
-      this.case_id = val;
+      this.del_id = val;
       this.confirm({
         fun: this.dodeleteCase
       });
@@ -112,9 +113,9 @@ export default {
     dodeleteCase() {
       let requestData = {
         method: "deleteCase",
-        case_id: this.case_id
+        case_id: this.del_id
       };
-      deleteCase(requestData).then(res => {
+      Case(requestData).then(res => {
         this.alertInfos(res);
         this.refreshTable();
       });

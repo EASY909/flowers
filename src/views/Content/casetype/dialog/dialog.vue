@@ -42,7 +42,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getCaseType, getCaseById } from "@/api/case.js";
+import { Case } from "@/api/case.js";
 import axios from "axios";
 export default {
   name: "caseDialog",
@@ -98,7 +98,7 @@ export default {
         method: "getCaseById",
         case_id: value
       };
-      getCaseById(resData).then(res => {
+      Case(resData).then(res => {
         this.form = res.data;
       });
     },
@@ -191,7 +191,7 @@ export default {
         page: 0,
         limit: 0
       };
-      getCaseType(requestData).then(res => {
+      Case(requestData).then(res => {
         this.caseItems = res.data;
       });
     }

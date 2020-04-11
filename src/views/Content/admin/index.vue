@@ -47,6 +47,7 @@ export default {
     //这里存放数据
     return {
       admin_id: "",
+      del_id:"",
       compDialog: false,
       tableConfig: {
         tHead: [
@@ -106,7 +107,7 @@ export default {
     },
    
     Delete(val) {
-      this.admin_id = val;
+      this.del_id = val;
       this.confirm({
         fun: this.deleteAdmin
       });
@@ -114,7 +115,7 @@ export default {
     deleteAdmin() {
       let requestData = {
         method: "deleteAdmin",
-        admin_id: this.admin_id
+        admin_id: this.del_id
       };
       getAdmin(requestData).then(res => {
         this.alertInfos(res);

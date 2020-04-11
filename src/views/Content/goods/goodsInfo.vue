@@ -39,7 +39,7 @@
     />-->
     <CompDialog
       @refreshTable="refreshTable"
-      :editGoods_id="editGoods_id"
+      :goods_id="goods_id"
       ref="CompDialog"
       :flag.sync="compDialog"
     />
@@ -49,7 +49,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getGoods, deleteGoods } from "@/api/goods";
+import { Goods } from "@/api/goods";
 import Table from "@c/table";
 import CompDialog from "./dialog/dialog";
 import { RequestUrl } from "@/api/requestUrlData.js";
@@ -63,7 +63,7 @@ export default {
   data() {
     //这里存放数据
     return {
-      editGoods_id: "",
+      del_id: "",
       goods_id: "",
       compDialog: false,
       easyDialogEdit: false,
@@ -122,7 +122,7 @@ export default {
   //方法集合
   methods: {
     DeleteGoods(val) {
-      this.goods_id = val;
+      this.del_id = val;
       this.confirm({
         fun: this.dodeleteGoods
       });
@@ -130,18 +130,18 @@ export default {
     dodeleteGoods() {
       let requestData = {
         method: "deleteGoods",
-        goods_id: this.goods_id
+        goods_id: this.del_id
       };
-      deleteGoods(requestData).then(res => {
+      Goods(requestData).then(res => {
         this.alertInfos(res);
         this.refreshTable();
       });
     },
     handleEdit(val) {
       this.compDialog = true;
-      this.editGoods_id = val;
+      this.goods_id = val;
       this.$refs["CompDialog"].GetGoodsById(val);
-      this.$store.commit("goods/SETEditGoodsId", val);
+      // this.$store.commit("goods/SETEditGoodsId", val);
     },
 
     refreshTable() {

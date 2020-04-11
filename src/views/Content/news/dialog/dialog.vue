@@ -47,7 +47,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getNewsType, addNews, getNewsById } from "@/api/news.js";
+import { News } from "@/api/news.js";
 import axios from "axios";
 export default {
   name: "newsDialog",
@@ -106,13 +106,14 @@ export default {
         method: "getNewsById",
         news_id: value
       };
-      getNewsById(resData).then(res => {
+      News(resData).then(res => {
         this.form = res.data;
         this.news_time=this.form.news_time;
       });
     },
     close() {
       this.$emit("update:flag", false);
+      this.$emit("update:news_id", "");
       this.resetForm();
     },
     AddNews(formName) {
@@ -130,6 +131,7 @@ export default {
       this.$refs["form"].resetFields();
     },
     DialogAddNews() {
+    
       if (this.news_id) {
         this.form.method = "modifyNews";
         this.form.news_id = this.news_id;
@@ -138,7 +140,7 @@ export default {
         delete this.form.news_id;
       }
 
-      addNews(this.form).then(res => {
+      News(this.form).then(res => {
         if (res.code == 0) {
           this.$message({
             showClose: true,
@@ -157,7 +159,7 @@ export default {
         page: 0,
         limit: 0
       };
-      getNewsType(requestData).then(res => {
+      News(requestData).then(res => {
         this.newsItems = res.data;
       });
     }

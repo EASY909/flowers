@@ -50,7 +50,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getGoodsItems, getGoodsById } from "@/api/goods.js";
+import { Goods } from "@/api/goods.js";
 import axios from "axios";
 export default {
   name: "goodsDialog",
@@ -60,7 +60,7 @@ export default {
       type: Boolean,
       default: false
     },
-    editGoods_id: {
+    goods_id: {
       type: String,
       default: ""
     }
@@ -92,9 +92,9 @@ export default {
   },
   //监听属性 类似于data概念
   computed: {
-    goods_id() {
-      return this.$store.state.goods.editGoods_id;
-    }
+    // goods_id() {
+    //   return this.$store.state.goods.goods_id;
+    // }
   },
   //监控data中的数据变化
   watch: {
@@ -111,7 +111,7 @@ export default {
         method: "getGoodsById",
         goods_id: value
       };
-      getGoodsById(resData).then(res => {
+      Goods(resData).then(res => {
         this.form = res.data;
       });
     },
@@ -130,8 +130,7 @@ export default {
       });
     },
     resetForm() {
-      // this.goods_id = "";
-      this.$store.commit("goods/SETEditGoodsId", "");
+
       this.form.goods_url = "";
       document.getElementById("Uimg").setAttribute("src", "");
       // document.getElementById("Uimg").setAttribute("src", "");
@@ -204,7 +203,7 @@ export default {
         page: 0,
         limit: 0
       };
-      getGoodsItems(requestData).then(res => {
+      Goods(requestData).then(res => {
         this.goodsItems = res.data;
       });
     }

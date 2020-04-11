@@ -40,7 +40,7 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import { RequestUrl } from "@/api/requestUrlData.js";
 import Table from "@c/table";
-import { deleteGoodsItems } from "@/api/goods";
+import { Goods } from "@/api/goods";
 import easyDialog from "@c/easyDialog/easyDialog";
 import easyDialogEdit from "@c/easyDialog/easyDialogEdit";
 export default {
@@ -134,7 +134,7 @@ export default {
         method: "deleteGoodsItems",
         items_id: this.items_id
       };
-      deleteGoodsItems(requestData).then(res => {
+      Goods(requestData).then(res => {
         this.alertInfos(res);
         this.refreshTable();
       });

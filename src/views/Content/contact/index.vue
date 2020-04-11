@@ -62,7 +62,6 @@ export default {
             message: res.msg,
             type: "success"
           });
-
           this.GetContact();
         }
       });

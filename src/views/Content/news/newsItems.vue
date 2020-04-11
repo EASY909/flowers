@@ -37,7 +37,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getNewsType, deleteNewsType } from "@/api/news";
+import { News } from "@/api/news";
 import easyDialog from "@c/easyDialog/easyDialog";
 import Table from "@c/table";
 import { RequestUrl } from "@/api/requestUrlData.js";
@@ -138,7 +138,7 @@ export default {
         newstype_id: this.newstype_id
       };
 
-      deleteNewsType(requestData).then(res => {
+      News(requestData).then(res => {
         this.alertInfos(res);
         this.refreshTable();
       });

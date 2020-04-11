@@ -41,7 +41,7 @@ import Table from "@c/table";
 import easyDialog from "@c/easyDialog/easyDialog";
 import easyDialogEdit from "@c/easyDialog/easyDialogEdit";
 import { RequestUrl } from "@/api/requestUrlData.js";
-import { deleteCaseType } from "@/api/case";
+import { Case } from "@/api/case";
 export default {
   //import引入的组件需要注入到对象中才能使用
   name: "casetypeItems",
@@ -49,6 +49,7 @@ export default {
   data() {
     //这里存放数据
     return {
+      del_id:"",
       casetype_id: "",
       easyDialog: false,
       easyDialogEdit: false,
@@ -117,10 +118,11 @@ export default {
   //方法集合
   methods: {
     refreshTable() {
+
       this.$refs.table.loadTableData(1);
     },
-    DeleteItems(casetype_id) {
-      this.casetype_id = casetype_id;
+    DeleteItems(val) {
+      this.del_id = val;
       this.confirm({
         fun: this.dodeleteCaseTypeItems
       });
@@ -128,15 +130,16 @@ export default {
     dodeleteCaseTypeItems() {
       let requestData = {
         method: "deleteCaseType",
-        casetype_id: this.casetype_id
+        casetype_id: this.del_id
       };
 
-      deleteCaseType(requestData).then(res => {
+      Case(requestData).then(res => {
         this.alertInfos(res);
         this.refreshTable();
       });
     },
     handleEdit(val) {
+    
       this.easyDialogEdit = true;
 
       this.casetype_id = val;
