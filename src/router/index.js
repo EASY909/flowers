@@ -29,7 +29,7 @@ export const defaultRouterMap = [
         redirect: "goodsItems",
         meta: {
             name: '产品管理',
-            icon: 'international'
+            icon: 'international',
         },
         component: () => import("@/views/Main/index.vue"),
         children: [
@@ -37,14 +37,16 @@ export const defaultRouterMap = [
                 path: "/goodsItems",
                 name: "goodsItems",
                 meta: {
-                    name: '产品类别'
+                    name: '产品类别',
+                    keepalive:true
                 },
                 component: () => import("../views/Content/goods/goodsItems.vue")
             }, {
                 path: "/goodsInfo",
                 name: "goodsInfo",
                 meta: {
-                    name: '产品信息'
+                    name: '产品信息',
+                    keepalive:true
                 },
                 component: () => import("../views/Content/goods/goodsInfo.vue")
             },
@@ -64,14 +66,16 @@ export const defaultRouterMap = [
                 path: "/newsItems",
                 name: "newsItems",
                 meta: {
-                    name: '新闻类别'
+                    name: '新闻类别',
+                    keepalive:true
                 },
                 component: () => import("../views/Content/news/newsItems.vue")
             }, {
                 path: "/newsInfo",
                 name: "newsInfo",
                 meta: {
-                    name: '新闻信息'
+                    name: '新闻信息',
+                    keepalive:true
                 },
                 component: () => import("../views/Content/news/newsInfo.vue")
             }],
@@ -90,14 +94,16 @@ export const defaultRouterMap = [
                 path: "/casetypeItems",
                 name: "casetypeItems",
                 meta: {
-                    name: '案例类别'
+                    name: '案例类别',
+                    keepalive:true
                 },
                 component: () => import("../views/Content/casetype/casetypeItems.vue")
             }, {
                 path: "/casetypeInfo",
                 name: "casetypeInfo",
                 meta: {
-                    name: '案例信息'
+                    name: '案例信息',
+                    keepalive:true
                 },
                 component: () => import("../views/Content/casetype/casetypeInfo.vue")
             }],
@@ -117,7 +123,8 @@ export const defaultRouterMap = [
                 path: "/contactindex",
                 name: "contactindex",
                 meta: {
-                    name: '联系方式管理'
+                    name: '联系方式管理',
+                    keepalive:true
                 },
                 component: () => import("../views/Content/contact")
             }],
@@ -139,7 +146,8 @@ export const defaultRouterMap = [
                 path: "/aboutindex",
                 name: "aboutindex",
                 meta: {
-                    name: '关于我们管理'
+                    name: '关于我们管理',
+                    keepalive:true
                 },
                 component: () => import("../views/Content/about")
             }],
@@ -159,7 +167,8 @@ export const defaultRouterMap = [
                 path: "/adminindex",
                 name: "adminindex",
                 meta: {
-                    name: '管理员管理'
+                    name: '管理员管理',
+                    keepalive:true
                 },
                 component: () => import("../views/Content/admin")
             }],

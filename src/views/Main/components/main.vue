@@ -3,7 +3,11 @@
   <div id="main">
     <div class="main-content">
       <div class="content">
-        <router-view />
+        <keep-alive >
+          <router-view  v-if="$route.meta.keepalive" />
+        </keep-alive>
+
+        <router-view v-if="!$route.meta.keepalive" />
       </div>
     </div>
   </div>
@@ -29,7 +33,9 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    console.log(this.$route.meta);
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -45,7 +51,6 @@ export default {
 #main {
   height: auto;
   background-color: #f5f5f5;
-
 }
 .main-content {
   width: 100%;
@@ -71,7 +76,7 @@ export default {
 .content {
   width: 100%;
   height: 100%;
-  padding: 30px 30px ;
+  padding: 30px 30px;
   @include webkit(box-sizing, border-box);
   background-color: #fff;
 }

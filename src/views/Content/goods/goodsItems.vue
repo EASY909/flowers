@@ -7,7 +7,7 @@
       class="marbom30"
       icon="el-icon-circle-plus-outline"
     >添加</el-button>
-
+    
     <!-- <easyDialog :flag="easyDialog" @close="close" /> -->
     <easyDialog @refreshTable="refreshTable" :flag.sync="easyDialog" :dialogInfo="dialogInfo" />
     <Table ref="table" :tableConfig="tableConfig">
