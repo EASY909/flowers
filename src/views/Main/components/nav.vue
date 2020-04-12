@@ -6,7 +6,7 @@
     </div>
 
     <el-menu
-      default-active="2"
+      :default-active="defaultActive"
       class="el-menu-vertical-demo"
       @open="handleOpen"
       @close="handleClose"
@@ -49,7 +49,9 @@ export default {
   components: {},
   data() {
     //这里存放数据
-    return {};
+    return {
+      // defaultActive:1
+    };
   },
   //监听属性 类似于data概念
   computed: {
@@ -66,6 +68,11 @@ export default {
       }
 
       return this.$router.options.routes;
+    },
+    defaultActive(){
+      let router=this.$route.path
+      
+      return router
     }
   },
   //监控data中的数据变化

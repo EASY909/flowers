@@ -1,7 +1,7 @@
 const path = require('path');
 module.exports = {
     // 基本路径
-    publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
+    publicPath: process.env.NODE_ENV === 'production' ? '' : '/'+process.env.VUE_APP_BASE,
     // 输出文件目录
     outputDir: process.env.NODE_ENV === 'production' ? 'dist' : 'devdist',
     // eslint-loader 是否在保存的时候检查
@@ -64,12 +64,12 @@ module.exports = {
         hot: true, // 开启热加载
         hotOnly: false,
         proxy: {
-            '/devApi': {
+            [process.env.VUE_APP_API]: {
                 target: 'http://localhost:8888/flowers',
                 // target: 'http://106.12.191.36/SecondhandCampus',
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/devApi': ''
+                    ['^' + process.env.VUE_APP_API]: ''
                 }
             }
         }, // 设置代理

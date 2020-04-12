@@ -1,15 +1,7 @@
 <!--  -->
 <template>
-  <div id="main">
-    <div class="main-content">
-      <div class="content">
-        <keep-alive >
-          <router-view  v-if="$route.meta.keepalive" />
-        </keep-alive>
-
-        <router-view v-if="!$route.meta.keepalive" />
-      </div>
-    </div>
+  <div>
+    <h1>404未发现</h1>
   </div>
 </template>
 
@@ -19,6 +11,7 @@
 
 export default {
   //import引入的组件需要注入到对象中才能使用
+  name:"notfoundindex",
   components: {},
   data() {
     //这里存放数据
@@ -31,12 +24,9 @@ export default {
   //方法集合
   methods: {},
   //生命周期 - 创建完成（可以访问当前this实例）
-  created() {
-
-  },
+  created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {
-  },
+  mounted() {},
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -48,37 +38,4 @@ export default {
 </script>
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
-@import "../../../styles/config.scss";
-#main {
-  height: auto;
-  background-color: #f5f5f5;
-}
-.main-content {
-  width: 100%;
-  height: 100%;
-  padding-top: $layoutHeader + 30;
-  padding-bottom: 30px;
-  padding-right: 30px;
-
-  @include webkit(box-sizing, border-box);
-
-  @include webkit(transition, all 0.3s ease 0s);
-}
-.open {
-  .main-content {
-    padding-left: $navMenu + 30;
-  }
-}
-.close {
-  .main-content {
-    padding-left: $navMenuMin + 30;
-  }
-}
-.content {
-  width: 100%;
-  height: 100%;
-  padding: 30px 30px;
-  @include webkit(box-sizing, border-box);
-  background-color: #fff;
-}
 </style>

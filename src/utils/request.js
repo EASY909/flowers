@@ -1,8 +1,9 @@
 import axios from "axios";
-const BASEURL = process.env.NODE_ENV === 'production' ? '/devApi' : '/devApi';
+// const BASEURL = process.env.NODE_ENV === 'production' ? '/devApi' : '/devApi';
+const BASEURL = process.env.NODE_ENV === 'production' ? process.env.VUE_APP_API : process.env.VUE_APP_API;
 import Qs from 'qs'
 //拦截器
-
+console.log(process.env.NODE_ENV);
 const service = axios.create({
     baseURL: BASEURL,
     timeout: 15000,

@@ -3,6 +3,7 @@ import Router from "vue-router";
 Vue.use(Router);
 
 export const defaultRouterMap = [
+  
     {
         path: "/",
         redirect: "login",
@@ -172,9 +173,24 @@ export const defaultRouterMap = [
                 },
                 component: () => import("../views/Content/admin")
             }],
+    },
+    {
+        path: "*",
+        name: "notfound",
+        child: false,
+        hidden: true,
+        redirect: "404index",
+        component: () => import("@/views/Main/index.vue"),
+        children: [
+            {
+                path: "/404index",
+                name: "404index",
+                component: () => import("../../404")
+            }],
     }
 ]
 export default new Router({
+    base:process.env.VUE_APP_BASE,
     routes: defaultRouterMap
 });
 
